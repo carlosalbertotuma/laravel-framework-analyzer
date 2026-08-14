@@ -65,5 +65,16 @@ python3 server.py
 A ferramenta mantém um pequeno banco de dados local (`storage/reports.db`) para guardar o histórico de todos os relatórios que você já solicitou. Eles podem ser baixados a qualquer momento pelo painel **Histórico**.
 
 ---
+<img width="1046" height="1145" alt="image" src="https://github.com/user-attachments/assets/26e6104e-e9e6-4849-bdbc-96e2326c083f" />
 
+<img width="1057" height="247" alt="image" src="https://github.com/user-attachments/assets/d7623996-a9ac-4aeb-9d5f-315763c0f3d2" />
+
+
+<img width="2533" height="1343" alt="image" src="https://github.com/user-attachments/assets/59811c06-e879-4695-86ac-982ebbf1fa86" />
+
+<img width="1150" height="860" alt="image" src="https://github.com/user-attachments/assets/114a5442-aab1-446f-993d-cc53587ed67e" />
+
+
+
+---
 *2024-2026 redscan academy - by bl4dsc4n*
