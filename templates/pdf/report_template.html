@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório de Disparos - {{ report_id }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+            @bottom-center {
+                content: "2024-2026 redscan academy - by bl4dsc4n | Laravel Framework Analyser - Confidential - Page " counter(page) " of " counter(pages);
+                font-size: 10px;
+                color: #888888;
+                border-top: 1px solid #333;
+                padding-top: 5px;
+            }
+        }
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2, h3, h4 {
+            color: #ffffff;
+            font-weight: 300;
+        }
+        .text-red { color: #ff3333; }
+        .text-green { color: #00cc66; }
+        .text-neon { color: #00ffff; }
+        
+        .cover {
+            height: 250mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .cover h1 {
+            font-size: 48px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+            color: #ff3333;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+        .cover p { font-size: 18px; color: #aaaaaa; }
+        .cover .meta { margin-top: 50px; text-align: left; background: #1e1e1e; padding: 20px; border-left: 5px solid #ff3333; border-radius: 5px; }
+        
+        .page-break { page-break-before: always; }
+        
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            background-color: #252525;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        tr:nth-child(even) { background-color: #1a1a1a; }
+        
+        .badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        .badge-success { background-color: #004d26; color: #00ff80; border: 1px solid #00cc66; }
+        .badge-danger { background-color: #4d0000; color: #ff8080; border: 1px solid #ff3333; }
+        
+        .metrics-grid {
+            width: 100%;
+        }
+        .metrics-grid td {
+            width: 50%;
+            vertical-align: top;
+            border: none;
+            padding: 5px;
+        }
+        
+        .metric-box {
+            background: #252525;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border-bottom: 3px solid #333;
+        }
+        .metric-box h4 { margin: 0 0 10px 0; color: #aaa; font-size: 12px; text-transform: uppercase; }
+        .metric-box .value { font-size: 32px; color: #fff; font-weight: bold; }
+        
+        .timeline {
+            border-left: 2px solid #333;
+            padding-left: 20px;
+            margin-left: 10px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff3333;
+        }
+        .timeline-item.success::before { background: #00cc66; }
+        
+    </style>
+</head>
+<body>
+
+    <!-- CAPA -->
+    <div class="cover">
+        <h1>DISPAROS REPORT</h1>
+        <p>System Security Audit & Endpoint Analysis</p>
+        
+        <div class="meta">
+            <p><strong>Campaign:</strong> <span class="text-neon">{{ campaign_name }}</span></p>
+            <p><strong>Generated:</strong> {{ generated_at }}</p>
+            <p><strong>Report ID:</strong> {{ report_id }}</p>
+            <p><strong>Overall Status:</strong> {% if stats.failure == 0 %}<span class="text-green">SUCCESS</span>{% else %}<span class="text-red">COMPROMISED ({{ stats.failure }} Failures)</span>{% endif %}</p>
+        </div>
+    </div>
+    
+    <div class="page-break"></div>
+
+    <!-- RESUMO EXECUTIVO -->
+    <h2>Resumo Executivo</h2>
+    <div class="card">
+        <table class="metrics-grid">
+            <tr>
+                <td>
+                    <div class="metric-box" style="border-color: #555;">
+                        <h4>Total Execuções</h4>
+                        <div class="value">{{ stats.total }}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="metric-box" style="border-color: #00cc66;">
+                        <h4>Sucesso</h4>
+                        <div class="value">{{ stats.success }} <span style="font-size: 14px;">({{ stats.success_rate }}%)</span></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="metric-box" style="border-color: #ff3333;">
+                        <h4>Falhas</h4>
+                        <div class="value">{{ stats.failure }} <span style="font-size: 14px;">({{ stats.failure_rate }}%)</span></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="metric-box" style="border-color: #00ffff;">
+                        <h4>Tempo Total</h4>
+                        <div class="value">{{ stats.total_time_sec }}s</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        <table>
+            <tr>
+                <th>Tempo Médio</th>
+                <th>Tempo Mínimo</th>
+                <th>Tempo Máximo</th>
+            </tr>
+            <tr>
+                <td>{{ stats.avg_time }} ms</td>
+                <td>{{ stats.min_time }} ms</td>
+                <td>{{ stats.max_time }} ms</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ERROS -->
+    {% if stats.failure > 0 %}
+    <h2>Detalhamento de Erros</h2>
+    <div class="card">
+        <table>
+            <tr>
+                <th>Mensagem de Erro</th>
+                <th>Ocorrências</th>
+                <th>Percentual</th>
+            </tr>
+            {% for err in stats.top_errors %}
+            <tr>
+                <td style="color: #ff8080;">{{ err.error[:80] }}{% if err.error|length > 80 %}...{% endif %}</td>
+                <td>{{ err.count }}</td>
+                <td>{{ err.percentage|round(2) }}%</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+    
+    <div class="page-break"></div>
+    
+    <!-- RESULTADOS -->
+    <h2>Detalhamento dos Disparos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Método</th>
+                <th>Destino (URL)</th>
+                <th>Status</th>
+                <th>Tempo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ep in stats.endpoints %}
+            <tr>
+                <td><span style="color:#00ffff;">{{ ep.method }}</span></td>
+                <td style="word-break: break-all; max-width: 300px;">{{ ep.url }}</td>
+                <td>
+                    {% if ep.status >= 200 and ep.status < 400 %}
+                        <span class="badge badge-success">{{ ep.status }} OK</span>
+                    {% else %}
+                        <span class="badge badge-danger">{{ ep.status }} FAILED</span>
+                    {% endif %}
+                </td>
+                <td>{{ ep.time }} ms</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- AUDITORIA -->
+    <div class="page-break"></div>
+    <h2>Auditoria e Rastreabilidade</h2>
+    <div class="card timeline">
+        <div class="timeline-item success">
+            <strong>Início da Execução</strong>
+            <p style="margin:5px 0; color:#aaa; font-size:12px;">Campanha: {{ campaign_name }} iniciou rastreamento de {{ stats.total }} rotas.</p>
+        </div>
+        <div class="timeline-item {% if stats.failure > 0 %}error{% else %}success{% endif %}">
+            <strong>Conclusão dos Disparos</strong>
+            <p style="margin:5px 0; color:#aaa; font-size:12px;">Processamento finalizado com tempo total de {{ stats.total_time_sec }} segundos.</p>
+        </div>
+        <div class="timeline-item success">
+            <strong>Geração do Relatório</strong>
+            <p style="margin:5px 0; color:#aaa; font-size:12px;">Relatório emitido. ID: {{ report_id }}</p>
+        </div>
+    </div>
+    
+    <div class="card" style="margin-top: 30px; font-size: 11px; color: #888;">
+        <strong>Application:</strong> Laravel Framework Analyser<br>
+        <strong>Report ID:</strong> {{ report_id }}<br>
+        <strong>Generated By:</strong> Automated Queue System<br>
+        <strong>Timestamp:</strong> {{ generated_at }}<br><br>
+        <div style="text-align: center; border-top: 1px solid #333; padding-top: 10px; font-family: monospace;">
+            2024-2026 redscan academy - by bl4dsc4n
+        </div>
+    </div>
+
+</body>
+</html>
