@@ -1,5 +1,8 @@
 # Laravel Framework Analyser
 
+<img width="1057" height="247" alt="image" src="https://github.com/user-attachments/assets/c6edc791-5aa3-45b9-942c-1abf46702aa3" />
+
+---
 O **Laravel Framework Analyser** é uma ferramenta avançada de auditoria, mapeamento de rotas e varredura de endpoints para projetos e frameworks desenvolvidos em Laravel. Ele não apenas analisa o código-fonte da aplicação mapeando todas as rotas de forma estática, mas também gera uma **interface gráfica interativa (Web UI)** para testes dinâmicos e emissão de **Relatórios Profissionais em PDF**.
 
 ## Funcionalidades Principais
